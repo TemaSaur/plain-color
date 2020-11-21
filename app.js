@@ -7,7 +7,7 @@ function concat (str, num) {
 
 // check wether the browser window is in FS mode 
 function isFullscreen() {
-	return window.screenTop && window.screenY;
+	return document.fullscreenElement !== null
 }
 
 /* stolen code */
