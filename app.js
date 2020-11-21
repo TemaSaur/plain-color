@@ -43,22 +43,27 @@ const fs = document.querySelector("#fullscreen");
 const elem = document.documentElement;
 
 /* Main script */
+updateIcon("#ff8")
+
 input.onchange = () => {
-	let a = input.value;
-	var len = a.length;
+	let val = input.value;
+	var len = val.length;
 	// making the string long enough for input[type=color]
 	if (len >= 1 && len <= 3) {
-		a = concat(a, Math.ceil(6 / len));
+		val = concat(val, Math.ceil(6 / len));
 	}
 	// coloring the bg, making input[type=color] the same active color
-	document.body.style.background = '#' + a;
-	color.value = '#' + a;
+	hashVal = "#" + val;
+	document.body.style.background = hashVal;
+	color.value = hashVal;
+	updateIcon(hashVal)
 }
 
 color.onchange = () => {
 	let c = color.value;
 	document.body.style.background = c;
 	input.value = color.value.substring(1,7);
+	updateIcon("#" + color.value)
 }
 
 fs.onclick = () => {
@@ -67,3 +72,43 @@ fs.onclick = () => {
 	else
 		fullscreenOn();
 }
+
+
+/////////////////// 
+
+function onImageLoaded(link, fill) {
+	let canvas = document.createElement("canvas");
+	canvas.width = 16;
+	canvas.height = 16;
+	let ctx = canvas.getContext("2d");
+
+	ctx.beginPath();
+	ctx.arc(8, 8, 7, 0, 2 * Math.PI);
+	ctx.fillStyle = fill
+	ctx.fill();
+
+	link.type = "image/x-icon";
+	link.href = canvas.toDataURL();
+}
+
+
+
+function updateIcon(fill) {
+
+	let link = document.querySelector("link[rel~='icon']");
+	if (!link) {
+		link = document.createElement("link");
+		link.setAttribute("rel", "shortcut icon");
+		document.head.appendChild(link);
+	}
+	let faviconUrl = link.href || window.location.origin + "/favicon.ico";
+
+
+	let img = document.createElement("img");
+	img.addEventListener("load", () => onImageLoaded(link, fill));
+	img.src = faviconUrl;
+
+}
+
+
+
