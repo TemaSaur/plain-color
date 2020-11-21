@@ -5,12 +5,20 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Plain color</title>
 	<link rel="stylesheet" href="style.css">
+	<link rel="shortcut icon" href="icon.svg">
 </head>
 <body>
 	<section>
-		<div class="ask">write your color</div>
-		<span># </span><input type="text" id="color" maxlength="6">
-		<input type="color" name="colors" id="color-spect">
+		<!-- <div class="ask">color</div> -->
+		<span id="hash"># </span>
+		<span id="border-1">
+			<input type="text" maxlength="6" value="FFFF88" id="color">
+		</span>
+		<input type="color" name="colors" value="#ffff88" id="color-pick">
+		<br>
+		<span id="border-2">
+			<button id="fullscreen">fullscreen</button>
+		</span>
 	</section>
 	<script src="app.js"></script>
 </body>
