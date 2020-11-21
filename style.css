@@ -1,5 +1,6 @@
 * {
 	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 }
@@ -21,6 +22,7 @@ section {
 	top: 50%;
 	left: calc(50% - .9rem);
 	transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
 }
 
 .ask, #hash, #color {
