@@ -63,7 +63,7 @@ color.onchange = () => {
 	let c = color.value;
 	document.body.style.background = c;
 	input.value = color.value.substring(1,7);
-	updateIcon("#" + color.value)
+	updateIcon(c)
 }
 
 fs.onclick = () => {
