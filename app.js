@@ -1,114 +1,105 @@
-// repeat string *str* *num* times
-function concat (str, num) {
-	let out = "";
-	while (num--) out += str;
-	return out;
+/* Variables */
+const inputEl = document.querySelector("#color")
+const colorEl = document.querySelector("#color-pick")
+const fullscreenBtn = document.querySelector("#fullscreen")
+const elem = document.documentElement
+
+const onImageLoaded = (link, fill) => {
+	let canvas = document.createElement("canvas")
+	canvas.width = 16
+	canvas.height = 16
+	let ctx = canvas.getContext("2d")
+
+	ctx.beginPath()
+	ctx.arc(8, 8, 7, 0, 2 * Math.PI)
+	ctx.fillStyle = fill
+	ctx.fill()
+
+	link.type = "image/x-icon"
+	link.href = canvas.toDataURL()
 }
 
-// check wether the browser window is in FS mode 
-function isFullscreen() {
-	return document.fullscreenElement !== null
+const updateIcon = (fill) => {
+	let link = document.querySelector("link[rel~='icon']")
+	if (!link) {
+		link = document.createElement("link")
+		link.setAttribute("rel", "shortcut icon")
+		document.head.appendChild(link)
+	}
+	let faviconUrl = link.href || window.location.origin + "/favicon.ico"
+
+	let img = document.createElement("img")
+	img.addEventListener("load", () => onImageLoaded(link, fill))
+	img.src = faviconUrl
 }
+
+// repeat string *str* *num* times
+const repeatString = (str, num) => {
+	let out = ""
+	while (num--) out += str
+	return out
+}
+
+// check wether the browser window is in FS mode
+const isFullscreenActive = () => document.fullscreenElement !== null
 
 /* stolen code */
 // enable fullscreen
-function fullscreenOn() {
+const enableFullscreen = () => {
 	if (elem.requestFullscreen) {
-		elem.requestFullscreen();
+		elem.requestFullscreen()
 	} else if (elem.webkitRequestFullscreen) {
-		// Safari 
-		elem.webkitRequestFullscreen();
+		// Safari
+		elem.webkitRequestFullscreen()
 	} else if (elem.msRequestFullscreen) {
 		// IE 11
-		elem.msRequestFullscreen();
+		elem.msRequestFullscreen()
 	}
 }
 // disable fullscreen
-function fullscreenOff() {
+const disableFullscreen = () => {
 	if (document.exitFullscreen) {
-		document.exitFullscreen();
+		document.exitFullscreen()
 	} else if (document.webkitExitFullscreen) {
 		// Safari
-		document.webkitExitFullscreen();
+		document.webkitExitFullscreen()
 	} else if (document.msExitFullscreen) {
 		// IE11
-		document.msExitFullscreen();
+		document.msExitFullscreen()
 	}
 }
-
-/* Variables */
-let input = document.querySelector("#color");
-let color = document.querySelector("#color-pick");
-const fs = document.querySelector("#fullscreen");
-const elem = document.documentElement;
 
 /* Main script */
 updateIcon("#ff8")
 
-input.onchange = () => {
-	let val = input.value;
-	var len = val.length;
+const onInputInput = () => {
+	let value = inputEl.value
+	const len = value.length
 	// making the string long enough for input[type=color]
-	if (len >= 1 && len <= 3) {
-		val = concat(val, Math.ceil(6 / len));
+	if (len >= 2 && len <= 3) {
+		value = repeatString(value, Math.ceil(6 / len))
 	}
 	// coloring the bg, making input[type=color] the same active color
-	hashVal = "#" + val;
-	document.body.style.background = hashVal;
-	color.value = hashVal;
+	const hashVal = "#" + value
+	document.body.style.background = hashVal
+	colorEl.value = hashVal
 	updateIcon(hashVal)
 }
 
-color.onchange = () => {
-	let c = color.value;
-	document.body.style.background = c;
-	input.value = color.value.substring(1,7);
-	updateIcon(c)
+inputEl.oninput = onInputInput
+
+const onColorInput = () => {
+	let colorValue = colorEl.value
+	document.body.style.background = colorValue
+	inputEl.value = colorValue.substring(1, 7)
+	updateIcon(colorValue)
 }
 
-fs.onclick = () => {
-	if (isFullscreen())
-		fullscreenOff();
-	else
-		fullscreenOn();
+colorEl.oninput = onColorInput
+
+const onFullscreenBtnClick = () => {
+	if (isFullscreenActive()) disableFullscreen()
+	else enableFullscreen()
 }
 
-
-/////////////////// 
-
-function onImageLoaded(link, fill) {
-	let canvas = document.createElement("canvas");
-	canvas.width = 16;
-	canvas.height = 16;
-	let ctx = canvas.getContext("2d");
-
-	ctx.beginPath();
-	ctx.arc(8, 8, 7, 0, 2 * Math.PI);
-	ctx.fillStyle = fill
-	ctx.fill();
-
-	link.type = "image/x-icon";
-	link.href = canvas.toDataURL();
-}
-
-
-
-function updateIcon(fill) {
-
-	let link = document.querySelector("link[rel~='icon']");
-	if (!link) {
-		link = document.createElement("link");
-		link.setAttribute("rel", "shortcut icon");
-		document.head.appendChild(link);
-	}
-	let faviconUrl = link.href || window.location.origin + "/favicon.ico";
-
-
-	let img = document.createElement("img");
-	img.addEventListener("load", () => onImageLoaded(link, fill));
-	img.src = faviconUrl;
-
-}
-
-
-
+fullscreenBtn.onclick = onFullscreenBtnClick
