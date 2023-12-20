@@ -3,7 +3,7 @@ const inputEl = document.querySelector("#color")
 const colorEl = document.querySelector("#color-pick")
 const fullscreenBtn = document.querySelector("#fullscreen")
 const elem = document.documentElement
-const defaultColor = "#ffff88"
+const defaultColor = "#FFFF88"
 
 const onImageLoaded = (link, fill) => {
 	let canvas = document.createElement("canvas")
@@ -72,7 +72,8 @@ const disableFullscreen = () => {
 
 /* Main script */
 // console.log(window.location.hash)
-const initialColor = window.location.hash ?? defaultColor
+const initialColor = window.location.hash ? window.location.hash : defaultColor
+console.log(initialColor)
 
 document.body.style.background = initialColor
 inputEl.value = initialColor.substring(1, 7)
